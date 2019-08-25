@@ -23,14 +23,21 @@
         <div v-show="type === 0" class="keyboard-control__province">
           <template v-for="(cell, index) in province">
             <div class="keyboard-control__cell" :key="index">
-              <div
-                v-for="(item, idx) in cell"
-                @click="checkProvince(item)"
-                class="keyboard-control__cell__item"
-                :class="{empty: !item, active: provinceVal === item}"
-                :key="idx">
-                {{item}}
-              </div>
+              <template v-for="(item, idx) in cell">
+                <template v-if="disabledKeys.includes(item)">
+                  <div class="keyboard-control__cell__item disabled" :key="idx">
+                    <span>{{item}}</span>
+                  </div>
+                </template>
+                <template v-else>
+                  <div
+                    @click="checkProvince(item)"
+                    class="keyboard-control__cell__item"
+                    :class="{empty: !item, active: provinceVal === item}"
+                    :key="idx"
+                  >{{item}}</div>
+                </template>
+              </template>
             </div>
           </template>
         </div>
@@ -121,7 +128,7 @@ const formatVal = function (value, defaultProvince = '湘') {
   } else {
     valid = false
   }
-  
+
   return {
     provinceVal,
     numberVal,
